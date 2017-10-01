@@ -1,0 +1,71 @@
+
+
+Rest Spring
+ExceptionHandlers
+ExceptionResolver(AbstractHandlerExceptionResolver)
+InitBinder
+	CustomPropertyEditors
+	CustomFormatters
+Interceptors
+ViewResolvers
+MultiPart
+
+RequestMappingHandlers
+	BeanNameUrlHandlerMapping
+	ControllerClassNameHandlerMapping - Deprecated
+	SimpleUrlHandlerMapping
+	Order of handlers
+JavaBased Config
+I18N
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		<bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+		    <property name="mappings">
+		        <value>
+		            /simpleUrlWelcome=welcome
+		            /*/simpleUrlWelcome=welcome
+		        </value>
+		        <props>
+            <prop key="/simpleUrlWelcome">welcome</prop>
+            <prop key="/*/simpleUrlWelcome">welcome</prop>
+        </props>
+		    </property>
+		</bean>
+		<bean id="welcome" class="com.baeldung.WelcomeController" />

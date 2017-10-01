@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+	<mvc:annotation-driven enable-matrix-variables="true" />
+	<context:annotation-config />
+	<context:component-scan base-package="org.mainlogic.springmvc.controller" />
+	<context:component-scan base-package="org.mainlogic.springmvc.validate" />
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/hello/**" />
+			<ref bean="customInterceptor" />
+		</mvc:interceptor>
+	</mvc:interceptors>
+
+	<bean id="customInterceptor" class="org.mainlogic.springmvc.interceptor.CustomInterceptor">
+	</bean>
+
+	<!-- <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"> 
+		<property name="objectMapper"></property> </bean> -->
+
+	<bean id="simpleMappingExceptionResolver"
+		class="org.mainlogic.springmvc.error.ExtendedSimpleMappingExceptionResolver">
+		<property name="exceptionMappings">
+			<map>
+				<entry key="JsonException" value="jsonError" />
+				<entry key="Exception" value="error" />
+			</map>
+		</property>
+
+		<!-- See note below on how this interacts with Spring Boot -->
+		<property name="defaultErrorView" value="error" />
+		<property name="exceptionAttribute" value="ex" />
+
+		<!-- Name of logger to use to log exceptions. Unset by default, so logging 
+			is disabled unless you set a value. -->
+		<!-- <property name="warnLogCategory" value="example.MvcLogger"/> -->
+	</bean>
+
+	<bean id="iViewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/jsp/"></property>
+		<property name="suffix" value=".jsp"></property>
+		<property name="order" value="2"></property>
+	</bean>
+	<bean id="rViewResolver"
+		class="org.springframework.web.servlet.view.ResourceBundleViewResolver">
+		<property name="basename" value="view"></property>
+		<property name="order" value="1"></property>
+	</bean>
+	
+	<bean id="xViewResolver"
+		class="org.springframework.web.servlet.view.XmlViewResolver">
+		<property name="location" value="classpath:view.xml"></property>
+		<property name="order" value="0"></property>
+	</bean>
+
+	<bean id="messageSource"
+		class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basename" value="error"></property>
+	</bean>
+	
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.support.StandardServletMultipartResolver">
+	</bean>
+</beans>
